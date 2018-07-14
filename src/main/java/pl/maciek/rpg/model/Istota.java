@@ -134,13 +134,13 @@ public abstract class Istota implements FunkcjeIstoty {
                 int silaAtaku = potencjalneObrazenia - wytrzymalosc;
                 System.out.println(typPostaci.name() + " traci " + silaAtaku + " punktow zycia.");
                 punktyZycia -= silaAtaku;
-            } else System.out.println("Ofiara nie doznala obrazen.");
+            } else System.out.println(this.getTypPostaci() + " nie doznal obrazen.");
             if (punktyZycia <= 0) {
-                System.out.println("Ofiara zginela.");
+                System.out.println(this.getTypPostaci() + " nie zyje.");
             } else {
             }
         } else {
-            System.out.println("Ofiara wykonala unik.");
+            System.out.println(this.getTypPostaci() + " wykonal unik.");
         }
     }
 }

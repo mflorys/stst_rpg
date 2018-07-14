@@ -1,6 +1,10 @@
 package pl.maciek.rpg.model;
 
-public abstract class Istota {
+import interfaces.FunkcjeIstoty;
+import service.TworzeniePostaciService;
+import service.WalkaService;
+
+public abstract class Istota implements FunkcjeIstoty {
 
     Integer sila;
     Integer inicjatywa;
@@ -24,7 +28,7 @@ public abstract class Istota {
         this.typPostaci = typPostaci;
     }
 
-    public Istota(TypPostaci typPostaci){
+    public Istota(TypPostaci typPostaci) {
         this.typPostaci = typPostaci;
     }
 
@@ -93,6 +97,10 @@ public abstract class Istota {
         this.zrecznosc = zrecznosc;
     }
 
+    public TypPostaci getTypPostaci() {
+        return this.typPostaci;
+    }
+
     @Override
     public String toString() {
         return "\n" + typPostaci + " {" +
@@ -105,5 +113,34 @@ public abstract class Istota {
                 ", punktyZycia=" + punktyZycia +
                 ", zrecznosc=" + zrecznosc +
                 "}";
+    }
+
+    @Override
+    public int atak(Istota ofiara) {
+        int potencjalneObrazenia = sila + TworzeniePostaciService.losuj(0, 3);
+        if (zrecznosc > TworzeniePostaciService.losuj(1, 10)) {
+            System.out.println(typPostaci.name() + " zadal cios.");
+            return potencjalneObrazenia;
+        } else {
+            System.out.println(typPostaci.name() + " chybil.");
+            return 0;
+        }
+    }
+
+    @Override
+    public void unik(int potencjalneObrazenia, Istota atakujacy) {
+        if (inicjatywa < TworzeniePostaciService.losuj(1, 10)) {
+            if (wytrzymalosc < potencjalneObrazenia) {
+                int silaAtaku = potencjalneObrazenia - wytrzymalosc;
+                System.out.println(typPostaci.name() + " traci " + silaAtaku + " punktow zycia.");
+                punktyZycia -= silaAtaku;
+            } else System.out.println("Ofiara nie doznala obrazen.");
+            if (punktyZycia <= 0) {
+                System.out.println("Ofiara zginela.");
+            } else {
+            }
+        } else {
+            System.out.println("Ofiara wykonala unik.");
+        }
     }
 }

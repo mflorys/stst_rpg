@@ -1,5 +1,6 @@
 package pl.maciek.rpg.model;
 
+import org.assertj.core.util.Lists;
 import service.TworzeniePostaciService;
 
 public class Krasnolud extends Istota {
@@ -12,6 +13,7 @@ public class Krasnolud extends Istota {
                 TworzeniePostaciService.losuj(1, 6),
                 TworzeniePostaciService.losuj(1, 6),
                 TworzeniePostaciService.losuj(1, 6),
-                TypPostaci.KRASNOLUD);
+                TypPostaci.KRASNOLUD,
+                Lists.newArrayList(TypPancerza.TARCZA, TypPancerza.ZBROJA));
     }
 }

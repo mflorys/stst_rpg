@@ -2,6 +2,8 @@ package pl.maciek.rpg.model;
 
 import service.TworzeniePostaciService;
 
+import java.util.Arrays;
+
 public class Czlowiek extends Istota {
 
     public Czlowiek() {
@@ -13,7 +15,8 @@ public class Czlowiek extends Istota {
                 TworzeniePostaciService.losuj(1, 6),
                 TworzeniePostaciService.losuj(1, 6),
                 TworzeniePostaciService.losuj(1, 6),
-                TypPostaci.CZLOWIEK);
+                TypPostaci.CZLOWIEK,
+                Arrays.asList(TypPancerza.ZBROJA));
     }
 
     @Override

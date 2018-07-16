@@ -2,7 +2,8 @@ package pl.maciek.rpg.model;
 
 import interfaces.FunkcjeIstoty;
 import service.TworzeniePostaciService;
-import service.WalkaService;
+
+import java.util.List;
 
 public abstract class Istota implements FunkcjeIstoty {
 
@@ -15,8 +16,9 @@ public abstract class Istota implements FunkcjeIstoty {
     Integer punktyZycia;
     Integer zrecznosc;
     TypPostaci typPostaci;
+    List<TypPancerza> pancerze;
 
-    public Istota(Integer sila, Integer inicjatywa, Integer iloscAtakow, Integer szybkosc, Integer iloscUnikow, Integer wytrzymalosc, Integer punktyZycia, Integer zrecznosc, TypPostaci typPostaci) {
+    public Istota(Integer sila, Integer inicjatywa, Integer iloscAtakow, Integer szybkosc, Integer iloscUnikow, Integer wytrzymalosc, Integer punktyZycia, Integer zrecznosc, TypPostaci typPostaci, List<TypPancerza> pancerze) {
         this.sila = sila;
         this.inicjatywa = inicjatywa;
         this.iloscAtakow = iloscAtakow;
@@ -26,10 +28,7 @@ public abstract class Istota implements FunkcjeIstoty {
         this.punktyZycia = punktyZycia;
         this.zrecznosc = zrecznosc;
         this.typPostaci = typPostaci;
-    }
-
-    public Istota(TypPostaci typPostaci) {
-        this.typPostaci = typPostaci;
+        this.pancerze = pancerze;
     }
 
     public Integer getInicjatywa() {
@@ -112,6 +111,7 @@ public abstract class Istota implements FunkcjeIstoty {
                 ", wytrzymalosc=" + wytrzymalosc +
                 ", punktyZycia=" + punktyZycia +
                 ", zrecznosc=" + zrecznosc +
+                ", pancerz=" + pancerze.toString() +
                 "}";
     }
 
@@ -129,18 +129,23 @@ public abstract class Istota implements FunkcjeIstoty {
 
     @Override
     public void unik(int potencjalneObrazenia, Istota atakujacy) {
-        if (inicjatywa < TworzeniePostaciService.losuj(1, 10)) {
+        if (inicjatywa > TworzeniePostaciService.losuj(1, 10)) {
+            System.out.println(this.getTypPostaci() + " wykonal unik.");
+        } else {
             if (wytrzymalosc < potencjalneObrazenia) {
-                int silaAtaku = potencjalneObrazenia - wytrzymalosc;
-                System.out.println(typPostaci.name() + " traci " + silaAtaku + " punktow zycia.");
-                punktyZycia -= silaAtaku;
-            } else System.out.println(this.getTypPostaci() + " nie doznal obrazen.");
+                int obrazenia = potencjalneObrazenia - wytrzymalosc;
+                if (obrazenia < punktyZycia) {
+                    punktyZycia -= obrazenia;
+                } else {
+                    punktyZycia = 0;
+                }
+                System.out.println(typPostaci.name() + " traci " + obrazenia + " punktow zycia. Pozostalo mu " + getPunktyZycia() + "p. zycia.");
+            } else {
+                System.out.println(this.getTypPostaci() + " otrzymal cios, lecz nie doznal obrazen.");
+            }
             if (punktyZycia <= 0) {
                 System.out.println(this.getTypPostaci() + " nie zyje.");
-            } else {
             }
-        } else {
-            System.out.println(this.getTypPostaci() + " wykonal unik.");
         }
     }
 }

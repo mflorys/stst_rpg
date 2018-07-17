@@ -3,7 +3,6 @@ package pl.maciek.rpg.model;
 import interfaces.FunkcjeIstoty;
 import service.TworzeniePostaciService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -147,36 +146,58 @@ public abstract class Istota implements FunkcjeIstoty {
     }
 
     @Override
-    public int atak(Istota ofiara) {
-        int potencjalneObrazenia = getSila() + TworzeniePostaciService.losuj(0, 3);
-        if (getZrecznosc() > TworzeniePostaciService.losuj(1, 10)) {
+    public WynikUderzenia atak(Istota ofiara) {
+        WynikUderzenia wynikUderzenia = new WynikUderzenia();
+        wynikUderzenia.setPotencjalneObrazenia(getSila() + losowanie(0, 3));
+
+        if (getZrecznosc() > losowanie(1, 10)) {
             System.out.println(getTypPostaci().name() + " zadal cios.");
-            return potencjalneObrazenia;
+            wynikUderzenia.setTrafioneMiejsce(losujTrafioneMiejsce());
+            return wynikUderzenia;
         } else {
             System.out.println(getTypPostaci().name() + " chybil.");
-            return 0;
+            wynikUderzenia.setTrafioneMiejsce(null);
+            return wynikUderzenia;
         }
     }
 
     @Override
-    public void unik(int potencjalneObrazenia, Istota atakujacy) {
-        if (getInicjatywa() > TworzeniePostaciService.losuj(1, 10)) {
-            System.out.println(this.getTypPostaci() + " wykonal unik.");
-        } else {
-            if (getWytrzymalosc() < potencjalneObrazenia) {
-                int obrazenia = potencjalneObrazenia - getWytrzymalosc();
-                if (obrazenia < getPunktyZycia()) {
-                    setPunktyZycia(getPunktyZycia() - obrazenia);
-                } else {
-                    setPunktyZycia(0);
-                }
-                System.out.println(getTypPostaci().name() + " traci " + obrazenia + " punktow zycia. Pozostalo mu " + getPunktyZycia() + "p. zycia.");
-            } else {
-                System.out.println(getTypPostaci() + " otrzymal cios, lecz nie doznal obrazen.");
-            }
-            if (getPunktyZycia() <= 0) {
-                System.out.println(getTypPostaci() + " nie zyje.");
-            }
+    public void unik(WynikUderzenia uderzenie) {
+        if (uderzenie.getTrafioneMiejsce() == null) {
+            return;
         }
+
+        if (getInicjatywa() > losowanie(1, 10)) {
+            System.out.println(getTypPostaci() + " wykonal unik.");
+            return;
+        }
+
+        if (czySaObrazeniaDlaOfiary(uderzenie)) {
+            przyjecieObrazenUderzenia(uderzenie);
+        } else {
+            System.out.println(getTypPostaci() + " otrzymal cios, lecz nie doznal obrazen.");
+        }
+
+    }
+
+    private void przyjecieObrazenUderzenia(WynikUderzenia uderzenie) {
+        int obrazenia = uderzenie.getPotencjalneObrazenia() - ochronaCzesciCiala(uderzenie.getTrafioneMiejsce()) - getWytrzymalosc();
+        if (obrazenia < getPunktyZycia()) {
+            setPunktyZycia(getPunktyZycia() - obrazenia);
+        } else {
+            setPunktyZycia(0);
+        }
+        System.out.println(getTypPostaci().name() + " traci " + obrazenia + " punktow zycia. Pozostalo mu " + getPunktyZycia() + "p. zycia.");
+        if (getPunktyZycia() <= 0) {
+            System.out.println(getTypPostaci() + " nie zyje.");
+        }
+    }
+
+    private boolean czySaObrazeniaDlaOfiary(WynikUderzenia uderzenie) {
+        return getWytrzymalosc() + ochronaCzesciCiala(uderzenie.getTrafioneMiejsce()) < uderzenie.getPotencjalneObrazenia();
+    }
+
+    private int losowanie(int min, int max) {
+        return TworzeniePostaciService.losuj(min, max);
     }
 }

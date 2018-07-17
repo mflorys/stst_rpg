@@ -1,8 +1,9 @@
 package interfaces;
 
 import pl.maciek.rpg.model.Istota;
+import pl.maciek.rpg.model.WynikUderzenia;
 
 public interface FunkcjeIstoty {
-    int atak(Istota ofiara);
-    void unik(int potencjalneObrazenia, Istota atakujacy);
+    WynikUderzenia atak(Istota ofiara);
+    void unik(WynikUderzenia uderzenie);
 }

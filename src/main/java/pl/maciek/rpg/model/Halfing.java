@@ -1,7 +1,8 @@
 package pl.maciek.rpg.model;
 
-import org.assertj.core.util.Lists;
 import service.TworzeniePostaciService;
+
+import java.util.Arrays;
 
 public class Halfing extends Istota {
     public Halfing(){
@@ -14,6 +15,7 @@ public class Halfing extends Istota {
                 TworzeniePostaciService.losuj(1, 6),
                 TworzeniePostaciService.losuj(1, 6),
                 TypPostaci.HALFING,
-                Lists.newArrayList(TypPancerza.REKAWICE, TypPancerza.ZBROJA));
+                TypBroni.KUSZA,
+                Arrays.asList(TypPancerza.REKAWICE, TypPancerza.ZBROJA));
     }
 }

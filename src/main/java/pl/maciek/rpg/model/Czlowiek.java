@@ -16,7 +16,8 @@ public class Czlowiek extends Istota {
                 TworzeniePostaciService.losuj(1, 6),
                 TworzeniePostaciService.losuj(1, 6),
                 TypPostaci.CZLOWIEK,
-                Arrays.asList(TypPancerza.ZBROJA));
+                TypBroni.MIECZ,
+                Arrays.asList(TypPancerza.ZBROJA, TypPancerza.HELM));
     }
 
     @Override

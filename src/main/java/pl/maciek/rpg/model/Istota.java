@@ -3,6 +3,7 @@ package pl.maciek.rpg.model;
 import interfaces.FunkcjeIstoty;
 import service.TworzeniePostaciService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Istota implements FunkcjeIstoty {
@@ -16,9 +17,12 @@ public abstract class Istota implements FunkcjeIstoty {
     Integer punktyZycia;
     Integer zrecznosc;
     TypPostaci typPostaci;
+    TypBroni aktywnaBron;
     List<TypPancerza> pancerze;
 
-    public Istota(Integer sila, Integer inicjatywa, Integer iloscAtakow, Integer szybkosc, Integer iloscUnikow, Integer wytrzymalosc, Integer punktyZycia, Integer zrecznosc, TypPostaci typPostaci, List<TypPancerza> pancerze) {
+
+    public Istota(Integer sila, Integer inicjatywa, Integer iloscAtakow, Integer szybkosc, Integer iloscUnikow, Integer wytrzymalosc,
+                  Integer punktyZycia, Integer zrecznosc, TypPostaci typPostaci, TypBroni aktywnaBron, List<TypPancerza> pancerze) {
         this.sila = sila;
         this.inicjatywa = inicjatywa;
         this.iloscAtakow = iloscAtakow;
@@ -29,6 +33,7 @@ public abstract class Istota implements FunkcjeIstoty {
         this.zrecznosc = zrecznosc;
         this.typPostaci = typPostaci;
         this.pancerze = pancerze;
+        this.aktywnaBron = aktywnaBron;
     }
 
     public Integer getInicjatywa() {
@@ -100,6 +105,17 @@ public abstract class Istota implements FunkcjeIstoty {
         return this.typPostaci;
     }
 
+    public int ochronaCzesciCiala(CzesciCiala wCoPiznal) {
+        int ochrona = 0;
+
+        for (int i = 0; i < pancerze.size(); i++) {
+           if(pancerze.get(i).chronioneCzesciCiala.toString().contains(wCoPiznal.toString())){
+               ochrona += pancerze.get(i).punktyObrony;
+           }
+        }
+        return ochrona;
+    }
+
     @Override
     public String toString() {
         return "\n" + typPostaci + " {" +
@@ -111,40 +127,41 @@ public abstract class Istota implements FunkcjeIstoty {
                 ", wytrzymalosc=" + wytrzymalosc +
                 ", punktyZycia=" + punktyZycia +
                 ", zrecznosc=" + zrecznosc +
+                ", aktywnaBron=" + aktywnaBron +
                 ", pancerz=" + pancerze.toString() +
                 "}";
     }
 
     @Override
     public int atak(Istota ofiara) {
-        int potencjalneObrazenia = sila + TworzeniePostaciService.losuj(0, 3);
-        if (zrecznosc > TworzeniePostaciService.losuj(1, 10)) {
-            System.out.println(typPostaci.name() + " zadal cios.");
+        int potencjalneObrazenia = getSila() + TworzeniePostaciService.losuj(0, 3);
+        if (getZrecznosc() > TworzeniePostaciService.losuj(1, 10)) {
+            System.out.println(getTypPostaci().name() + " zadal cios.");
             return potencjalneObrazenia;
         } else {
-            System.out.println(typPostaci.name() + " chybil.");
+            System.out.println(getTypPostaci().name() + " chybil.");
             return 0;
         }
     }
 
     @Override
     public void unik(int potencjalneObrazenia, Istota atakujacy) {
-        if (inicjatywa > TworzeniePostaciService.losuj(1, 10)) {
+        if (getInicjatywa() > TworzeniePostaciService.losuj(1, 10)) {
             System.out.println(this.getTypPostaci() + " wykonal unik.");
         } else {
-            if (wytrzymalosc < potencjalneObrazenia) {
-                int obrazenia = potencjalneObrazenia - wytrzymalosc;
-                if (obrazenia < punktyZycia) {
-                    punktyZycia -= obrazenia;
+            if (getWytrzymalosc() < potencjalneObrazenia) {
+                int obrazenia = potencjalneObrazenia - getWytrzymalosc();
+                if (obrazenia < getPunktyZycia()) {
+                    setPunktyZycia(getPunktyZycia() - obrazenia);
                 } else {
-                    punktyZycia = 0;
+                    setPunktyZycia(0);
                 }
-                System.out.println(typPostaci.name() + " traci " + obrazenia + " punktow zycia. Pozostalo mu " + getPunktyZycia() + "p. zycia.");
+                System.out.println(getTypPostaci().name() + " traci " + obrazenia + " punktow zycia. Pozostalo mu " + getPunktyZycia() + "p. zycia.");
             } else {
-                System.out.println(this.getTypPostaci() + " otrzymal cios, lecz nie doznal obrazen.");
+                System.out.println(getTypPostaci() + " otrzymal cios, lecz nie doznal obrazen.");
             }
-            if (punktyZycia <= 0) {
-                System.out.println(this.getTypPostaci() + " nie zyje.");
+            if (getPunktyZycia() <= 0) {
+                System.out.println(getTypPostaci() + " nie zyje.");
             }
         }
     }

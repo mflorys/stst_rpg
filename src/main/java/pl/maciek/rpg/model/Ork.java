@@ -1,7 +1,8 @@
 package pl.maciek.rpg.model;
 
-import org.assertj.core.util.Lists;
 import service.TworzeniePostaciService;
+
+import java.util.Arrays;
 
 public class Ork extends Istota {
     public Ork() {
@@ -14,6 +15,7 @@ public class Ork extends Istota {
                 TworzeniePostaciService.losuj(1, 6),
                 TworzeniePostaciService.losuj(1, 6),
                 TypPostaci.ORK,
-                Lists.newArrayList(TypPancerza.ZBROJA));
+                TypBroni.MACZUGA,
+                Arrays.asList(TypPancerza.ZBROJA));
     }
 }

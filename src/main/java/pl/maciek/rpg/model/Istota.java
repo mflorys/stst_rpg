@@ -4,6 +4,7 @@ import interfaces.FunkcjeIstoty;
 import service.TworzeniePostaciService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Istota implements FunkcjeIstoty {
@@ -109,11 +110,24 @@ public abstract class Istota implements FunkcjeIstoty {
         int ochrona = 0;
 
         for (int i = 0; i < pancerze.size(); i++) {
-           if(pancerze.get(i).chronioneCzesciCiala.toString().contains(wCoPiznal.toString())){
-               ochrona += pancerze.get(i).punktyObrony;
-           }
+            if (pancerze.get(i).chronioneCzesciCiala.toString().contains(wCoPiznal.toString())) {
+                ochrona += pancerze.get(i).punktyObrony;
+            }
         }
         return ochrona;
+    }
+
+    public CzesciCiala losujTrafioneMiejsce() {
+        CzesciCiala trafioneMiejsce = null;
+        int los = TworzeniePostaciService.losuj(0, 99);
+        List<CzesciCiala> czesciCiala = Arrays.asList(CzesciCiala.values());
+        for (int i = 0; i < czesciCiala.size(); i++) {
+            if (los > czesciCiala.get(i).minWartoscTrafienia && los < czesciCiala.get(i).maxWartoscTrafienia) {
+                trafioneMiejsce = czesciCiala.get(i);
+                break;
+            }
+        }
+        return trafioneMiejsce;
     }
 
     @Override

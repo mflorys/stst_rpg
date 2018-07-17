@@ -8,8 +8,8 @@ public enum CzesciCiala {
     NOGA_LEWA(75, 84),
     NOGA_PRAWA(85, 99);
 
-    private int minWartoscTrafienia;
-    private int maxWartoscTrafienia;
+    int minWartoscTrafienia;
+    int maxWartoscTrafienia;
 
     CzesciCiala(int minWartoscTrafienia, int maxWartoscTrafienia){
         this.minWartoscTrafienia = minWartoscTrafienia;

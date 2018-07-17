@@ -14,13 +14,7 @@ public class RpgApplication {
         List<Istota> istota = postac.stworzPostac(2);
 
         System.out.println(istota.toString());
-        istota.get(0).ochronaCzesciCiala(CzesciCiala.GLOWA);
-        istota.get(0).ochronaCzesciCiala(CzesciCiala.REKA_LEWA);
-        istota.get(0).ochronaCzesciCiala(CzesciCiala.REKA_PRAWA);
-        istota.get(0).ochronaCzesciCiala(CzesciCiala.NOGA_LEWA);
-        istota.get(0).ochronaCzesciCiala(CzesciCiala.NOGA_PRAWA);
-        istota.get(0).ochronaCzesciCiala(CzesciCiala.KORPUS);
-
+        istota.get(0).losujTrafioneMiejsce();
         WalkaService.walka(istota.get(0), istota.get(1));
 
     }
